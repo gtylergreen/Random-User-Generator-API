@@ -83,7 +83,7 @@ function generateModalText(person, array) {
       <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
       <div class="modal-info-container">
           <img class="modal-img" src="${currentModal.image.large}" alt="profile picture">
-          <h3 id="name" class="modal-name cap">${currentModal.firstName}</h3>
+          <h3 id="name" class="modal-name cap">${currentModal.firstName} ${currentModal.lastName}</h3>
           <a href=""><p class="modal-text">${currentModal.email}</p></a>
           <p class="modal-text cap">${currentModal.city}</p>
           <hr>
@@ -124,7 +124,9 @@ function generateModal(modaltext, number) {
         .parentElement;
       const modalCurrentDiv = document.querySelector('.modal-container');
       modalParentDiv.removeChild(modalCurrentDiv);
-      generateModalText(indexValue - 1, people);
+      if (indexValue - 1 >= 0) {
+        generateModalText(indexValue - 1, people);
+      }
     }
   });
 
@@ -135,7 +137,9 @@ function generateModal(modaltext, number) {
         .parentElement;
       const modalCurrentDiv = document.querySelector('.modal-container');
       modalParentDiv.removeChild(modalCurrentDiv);
-      generateModalText(indexValue + 1, people);
+      if (indexValue + 1 <= 11) {
+        generateModalText(indexValue + 1, people);
+      }
     }
   });
 }

@@ -11,6 +11,7 @@ function createUserObject(data) {
   console.log(data);
   for (let i = 0; i < data.length; i++) {
     const person = {
+      index: [i],
       image: data[i].picture,
       firstName: data[i].name.first,
       lastName: data[i].name.last,
@@ -64,9 +65,21 @@ function generateUserDisplay(user) {
     userCard.setAttribute('id', `${[i]}card`);
     userCard.innerHTML = generateHTML;
     galleryDiv.appendChild(userCard);
+    userCard.addEventListener('click', (e) => {
+      console.log(parseInt(e.target.className));
+      const currentPerson = parseInt(e.target.className);
+      generateModalText(currentPerson, people);
+    });
   }
+  //   galleryDiv.addEventListener('click', (e) => {
+  //     if (e.target.className.includes('person')) {
+  //       console.log(parseInt(e.target.className));
+  //       const currentPerson = parseInt(e.target.className);
+  //       generateModalText(currentPerson, people);
+  //     }
+  //   });
 }
-function generateModal(person, array) {
+function generateModalText(person, array) {
   let currentModal = array[person];
   console.log(currentModal);
   let modalHTML = ` <div class="modal-container">
@@ -82,10 +95,21 @@ function generateModal(person, array) {
           <p class="modal-text">${currentModal.address}</p>
           <p class="modal-text">Birthday: ${currentModal.birthday}</p>
       </div>
-  </div>`;
+  </div>
+  <div class="modal-btn-container">
+  <button type="button" id="modal-prev" class="modal-prev btn">Prev</button>
+  <button type="button" id="modal-next" class="modal-next btn">Next</button>
+</div>
+</div>
+  `;
+  generateModal(modalHTML, currentModal);
+}
 
+function generateModal(modaltext, number) {
+  console.log(number);
+  let indexValue = parseInt(number.index);
   const modalDiv = document.createElement('div');
-  modalDiv.innerHTML = modalHTML;
+  modalDiv.innerHTML = modaltext;
   galleryDiv.appendChild(modalDiv);
 
   const modalCloseButton = document.getElementById('modal-close-btn');
@@ -93,15 +117,30 @@ function generateModal(person, array) {
   modalCloseButton.addEventListener('click', () => {
     galleryDiv.removeChild(modalDiv);
   });
-}
 
-galleryDiv.addEventListener('click', (e) => {
-  if (e.target.className.includes('person')) {
-    console.log(parseInt(e.target.className));
-    const currentPerson = parseInt(e.target.className);
-    generateModal(currentPerson, people);
-  }
-});
+  const prevButton = document.getElementById('modal-prev');
+
+  prevButton.addEventListener('click', (e) => {
+    if (e.target.tagName === 'BUTTON') {
+      const modalParentDiv = document.querySelector('.modal-container')
+        .parentElement;
+      const modalCurrentDiv = document.querySelector('.modal-container');
+      modalParentDiv.removeChild(modalCurrentDiv);
+      generateModalText(indexValue - 1, people);
+    }
+  });
+
+  const nextButton = document.getElementById('modal-next');
+  nextButton.addEventListener('click', (e) => {
+    if (e.target.tagName === 'BUTTON') {
+      const modalParentDiv = document.querySelector('.modal-container')
+        .parentElement;
+      const modalCurrentDiv = document.querySelector('.modal-container');
+      modalParentDiv.removeChild(modalCurrentDiv);
+      generateModalText(indexValue + 1, people);
+    }
+  });
+}
 
 const searchHTML = `
 <form action="#" method="get">
@@ -110,12 +149,30 @@ const searchHTML = `
 </form>`;
 const search = document.createElement('div');
 search.innerHTML = searchHTML;
-pageDiv = document.querySelector('.header-inner-container');
-pageDiv.appendChild(search);
+searchDiv = document.querySelector('.search-container');
+searchDiv.appendChild(search);
 
 function searchUsers(value) {
+  //debugger;
   for (let i = 0; i < people.length; i++) {
-    if (people[i].firstName.includes(search)) {
+    //console.log(people[i].firstName);
+    if (people[i].firstName.toLowerCase().includes(value)) {
+      let currentIndex = people.indexOf(people[i]);
+      currentIndex = currentIndex + 'card';
+      console.log(document.getElementById(currentIndex));
+
+      document.getElementById(currentIndex).style.display = 'flex';
+    } else {
+      let currentIndex = people.indexOf(people[i]);
+      currentIndex = currentIndex + 'card';
+      document.getElementById(currentIndex).style.display = 'none';
+    }
+    if (value === '') {
+      let currentIndex = people.indexOf(people[i]);
+      currentIndex = currentIndex + 'card';
+      console.log(document.getElementById(currentIndex));
+
+      document.getElementById(currentIndex).style.display = 'flex';
     }
   }
 }
@@ -124,6 +181,12 @@ const searchButton = document.querySelector('.search-button');
 const searchInput = document.querySelector('.search-input');
 searchButton.addEventListener('click', () => {
   console.log('click');
-  console.log(searchInput.value);
-  searchUsers(searchInput.value);
+  console.log(searchInput.value.toLowerCase());
+  searchUsers(searchInput.value.toLowerCase());
+});
+
+searchInput.addEventListener('keyup', () => {
+  console.log('click');
+  console.log(searchInput.value.toLowerCase());
+  searchUsers(searchInput.value.toLowerCase());
 });

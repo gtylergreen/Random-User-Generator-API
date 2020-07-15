@@ -1,7 +1,5 @@
 //Global variables
 const galleryDiv = document.getElementById('gallery');
-const searchButton = document.querySelector('.search-button');
-const searchInput = document.querySelector('.search-input');
 
 //fetch API call to receive 12 results and only English keyboard companies.
 fetch(
@@ -57,7 +55,7 @@ function generateUserDisplay(user) {
                 <div class="${[i]}person card-info-container">
                     <h3 id="name" class="${[i]}person card-name cap">${
       user[i].firstName
-    }</h3>
+    } ${user[i].lastName}</h3>
     <a href=""><p class="${[i]}person card-text">${user[i].email}</p></a>
                     <p class="${[i]}person card-text cap">${
       user[i].city
@@ -176,6 +174,8 @@ function searchUsers(value) {
   }
 }
 
+const searchButton = document.querySelector('.search-button');
+const searchInput = document.querySelector('.search-input');
 //Adds an event listener to the search button if it is clicked to run search.
 searchButton.addEventListener('click', () => {
   searchUsers(searchInput.value.toLowerCase());

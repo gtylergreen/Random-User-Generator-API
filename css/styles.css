@@ -97,7 +97,7 @@ header h1 {
   justify-content: flex-start;
   cursor: pointer;
   width: 100%;
-  max-width: 250px;
+  max-width: fit-content;
   margin: 10px 10px 20px;
   padding: 10px;
   background: rgba(245, 245, 245, 0.9);

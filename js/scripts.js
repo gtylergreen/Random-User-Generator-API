@@ -33,6 +33,8 @@ function createUserObject(data) {
     let birthday = person.birthday.substring(0, 10);
     birthday = new Date(birthday).toDateString();
     birthday = birthday.substring(4, 16);
+    birthday = birthday.replace(/ /g, ', ');
+    birthday = birthday.replace(', ', ' ');
     person.birthday = birthday;
     people.push(person);
   }
@@ -93,7 +95,7 @@ function generateModalText(person, array) {
           <hr>
           <p class="modal-text">${currentModal.phone}</p>
           <p class="modal-text">${currentModal.address}</p>
-          <p class="modal-text">Birthday: ${currentModal.birthday}</p>
+          <p class="modal-text"><strong>Birthday:</strong> ${currentModal.birthday}</p>
       </div>
   </div>
   <div class="modal-btn-container">

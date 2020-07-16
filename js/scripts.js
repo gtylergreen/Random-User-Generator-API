@@ -2,9 +2,7 @@
 const galleryDiv = document.getElementById('gallery');
 
 //fetch API call to receive 12 results and only English keyboard companies.
-fetch(
-  'https://randomuser.me/api/?results=12&nat=au,br,ca,de,dk,es,fi,fr,gb,ie,nl,nz,tr,us'
-)
+fetch('https://randomuser.me/api/?results=12&nat=us')
   .then((response) => response.json())
   .then((data) => createUserObject(data.results));
 
@@ -28,6 +26,9 @@ function createUserObject(data) {
         ${data[i].location.postcode}`,
       birthday: data[i].dob.date,
     };
+
+    let phoneNumber = person.phone.replace('-', ' ');
+    person.phone = phoneNumber;
     //Formatted the birthday property to a more readable format.
     let birthday = person.birthday.substring(0, 10);
     birthday = new Date(birthday).toDateString();
@@ -45,7 +46,7 @@ function createUserObject(data) {
 function generateUserDisplay(user) {
   for (let i = 0; i < user.length; i++) {
     const generateHTML = `
-    <div class="${[i]}person card">
+   
             <div class="${[i]}person card-img-container">
                 <div class="${[i]}person card-img-container">
                     <img class="${[i]}person card-img" src="${
@@ -62,8 +63,10 @@ function generateUserDisplay(user) {
     }, <strong>${user[i].state}</strong></p>
                 </div>
                 </div>
-        </div>`;
+        `;
     const userCard = document.createElement('div');
+    userCard.classList.add(`${[i]}person`);
+    userCard.classList.add('card');
     userCard.setAttribute('id', `${[i]}card`);
     userCard.innerHTML = generateHTML;
     galleryDiv.appendChild(userCard);
@@ -73,12 +76,13 @@ function generateUserDisplay(user) {
     });
   }
 }
-
+//</div>
+// <div class="${[i]}person card">
 //Function that takes in the current index value the clicked card as well as the array of people.
 //Generates the modal text and calls the generateModal function.
 function generateModalText(person, array) {
   let currentModal = array[person];
-  let modalHTML = ` <div class="modal-container">
+  let modalHTML = ` 
   <div class="modal">
       <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
       <div class="modal-info-container">
@@ -104,9 +108,13 @@ function generateModalText(person, array) {
 //Takes in the modaltext and a classname. Uses parseInt to find the number of the classname, which will
 //serve as the index value. Appends the modal to the page and adds event listeners to the close and next
 //buttons.
+{
+  /* <div class="modal-container"></div> */
+}
 function generateModal(modaltext, number) {
   let indexValue = parseInt(number.index);
   const modalDiv = document.createElement('div');
+  modalDiv.classList.add('modal-container');
   modalDiv.innerHTML = modaltext;
   galleryDiv.appendChild(modalDiv);
 
